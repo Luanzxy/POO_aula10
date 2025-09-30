@@ -10,8 +10,7 @@ class Horario:
         self.set_id_servico(0)
 
     def __str__(self):
-        return f"{self.__id}- self.__data.strftime('%d/%m/%Y %H:%M')
-        -{self.__confirmado}"
+        return f"{self.__id}- self.__data.strftime('%d/%m/%Y %H:%M')-{self.__confirmado}"
 
     def get_id(self): return self.__id
     def get_data(self): return self.__data
@@ -33,12 +32,11 @@ class Horario:
 
     @staticmethod
     def from_json(dic):
-    horario = Horario(dic["id"], datetime.strptime(dic["data"], "%d/%m/%Y
-        %H:%M"))
-    horario.set_confirmado(dic["confirmado"])
-    horario.set_id_cliente(dic["id_cliente"])
-    horario.set_id_servico(dic["id_servico"])
-    return horario
+        horario = Horario(dic["id"], datetime.strptime(dic["data"], "%d/%m/%Y %H:%M"))
+        horario.set_confirmado(dic["confirmado"])
+        horario.set_id_cliente(dic["id_cliente"])
+        horario.set_id_servico(dic["id_servico"])
+        return horario
 
 class HorarioDAO:
     __objetos = []
@@ -55,8 +53,8 @@ class HorarioDAO:
 
     @classmethod
     def listar(cls):
-    cls.abrir()
-    return cls.__objetos
+        cls.abrir()
+        return cls.__objetos
 
     @classmethod
     def listar_id(cls, id):
@@ -65,14 +63,13 @@ class HorarioDAO:
             if obj.get_id() == id: return obj
         return None
 
-   @classmethod
-   def atualizar(cls, obj):
+    @classmethod
+    def atualizar(cls, obj):
         aux = cls.listar_id(obj.get_id())
         if aux is not None:
             cls.__objetos.remove(aux)
             cls.__objetos.append(obj)
             cls.salvar()
-
 
     @classmethod
     def excluir(cls, obj):
@@ -86,10 +83,10 @@ class HorarioDAO:
         cls.__objetos= []
         try:
             with open("horarios.json", mode="r") as arquivo:
-            list_dic = json.load(arquivo)
-            for dic in list_dic:
-                obj = Horario.from_json(dic)
-                cls.__objetos.append(obj)
+                list_dic = json.load(arquivo)
+                for dic in list_dic:
+                    obj = Horario.from_json(dic)
+                    cls.__objetos.append(obj)
         except FileNotFoundError:
             pass
 
